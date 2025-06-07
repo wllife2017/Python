@@ -1,12 +1,11 @@
 import sqlite3
-
+import os 
 # Making connection with database
 def connect_database():
     global conn
     global cur
-    conn = sqlite3.connect("bankmanaging.db")
+    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), "bankmanaging.db"))
     cur = conn.cursor()
-
     cur.execute(
         """
         CREATE TABLE IF NOT EXISTS bank (
@@ -35,7 +34,7 @@ def connect_database():
     # Only insert admin if not exists
     cur.execute("SELECT COUNT(*) FROM admin")
     if cur.fetchone()[0] == 0:
-        cur.execute("INSERT INTO admin VALUES (?, ?)", ('arpit', '123'))
+        cur.execute("INSERT INTO admin VALUES (?, ?)", ('admin', 'admin123'))
     
     conn.commit()
 
@@ -167,4 +166,4 @@ def get_detail(acc_no):
 # Check if employee exists
 def check_name_in_staff(name):
     cur.execute("SELECT 1 FROM staff WHERE name = ?", (name,))
-    return cur.fetchone() is not Non
+    return cur.fetchone() is not None
